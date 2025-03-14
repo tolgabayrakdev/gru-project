@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  firstName     String
+  lastName      String
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  forms         Form[]
+  feedbacks     Feedback[]
+}
+
+model Form {
+  id          String    @id @default(cuid())
+  title       String
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  feedbacks   Feedback[]
+  questions   Question[]
+}
+
+model Question {
+  id        String   @id @default(cuid())
+  text      String
+  type      String   // text, number, rating, etc.
+  required  Boolean  @default(false)
+  order     Int
+  formId    String
+  form      Form     @relation(fields: [formId], references: [id])
+  answers   Answer[]
+}
+
+model Feedback {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+  formId    String
+  form      Form     @relation(fields: [formId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  answers   Answer[]
+}
+
+model Answer {
+  id         String   @id @default(cuid())
+  value      String
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id])
+  feedbackId String
+  feedback   Feedback @relation(fields: [feedbackId], references: [id])
+}
