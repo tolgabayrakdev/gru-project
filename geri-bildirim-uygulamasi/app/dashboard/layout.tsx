@@ -15,12 +15,15 @@ import {
   Toolbar,
   Typography,
   useTheme,
+  Button,
+  Tooltip,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
   Dashboard as DashboardIcon,
   Assessment as AssessmentIcon,
   Settings as SettingsIcon,
+  Logout as LogoutIcon,
 } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '../lib/AuthContext';
@@ -39,6 +42,12 @@ export default function DashboardLayout({
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
+  };
+
+  const handleLogout = () => {
+    if (confirm('Çıkış yapmak istediğinize emin misiniz?')) {
+      logout();
+    }
   };
 
   const menuItems = [
@@ -90,9 +99,29 @@ export default function DashboardLayout({
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             {user?.firstName} {user?.lastName}
           </Typography>
-          <IconButton color="inherit" onClick={logout}>
-            <SettingsIcon />
-          </IconButton>
+          <Tooltip title="Çıkış Yap">
+            <Button 
+              color="inherit" 
+              onClick={handleLogout}
+              startIcon={<LogoutIcon />}
+              sx={{ 
+                display: { xs: 'none', sm: 'flex' },
+                borderRadius: '20px',
+                px: 2
+              }}
+            >
+              Çıkış Yap
+            </Button>
+          </Tooltip>
+          <Tooltip title="Çıkış Yap">
+            <IconButton 
+              color="inherit" 
+              onClick={handleLogout}
+              sx={{ display: { xs: 'flex', sm: 'none' } }}
+            >
+              <LogoutIcon />
+            </IconButton>
+          </Tooltip>
         </Toolbar>
       </AppBar>
       <Box
@@ -143,4 +172,4 @@ export default function DashboardLayout({
       </Box>
     </Box>
   );
-}
+} 
