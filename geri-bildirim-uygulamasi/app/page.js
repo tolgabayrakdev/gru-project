@@ -58,7 +58,7 @@ export default function Home() {
             
             <div className="mt-10">
               <a 
-                href="/register" 
+                href="/sign-up" 
                 className="inline-block bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-lg transition-colors"
               >
                 Hemen Başlayın
