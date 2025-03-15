@@ -1,5 +1,5 @@
 {
-  "name": "bildirim-uygulamasi",
+  "name": "geri-bildirim-uygulamasi",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -22,9 +22,6 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/node": "22.13.10",
-    "@types/react": "19.0.10",
-    "tailwindcss": "^4",
-    "typescript": "5.8.2"
+    "tailwindcss": "^4"
   }
 }

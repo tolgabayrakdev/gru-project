@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -11,6 +11,20 @@ export default function Home() {
           <p className="text-xl text-center text-gray-600 dark:text-gray-300 max-w-2xl">
             Müşteri deneyimini iyileştirmek için geri bildirimleri kolayca toplayın ve analiz edin
           </p>
+          <div className="mt-8 flex gap-4">
+            <Link 
+              href="/sign-in" 
+              className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-lg transition-colors"
+            >
+              Giriş Yap
+            </Link>
+            <Link 
+              href="/sign-up" 
+              className="bg-white hover:bg-gray-100 text-primary border border-primary font-bold py-3 px-6 rounded-lg transition-colors dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-blue-500"
+            >
+              Kayıt Ol
+            </Link>
+          </div>
         </header>
 
         <main className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-16">
@@ -57,12 +71,12 @@ export default function Home() {
             </div>
             
             <div className="mt-10">
-              <a 
+              <Link 
                 href="/sign-up" 
                 className="inline-block bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-lg transition-colors"
               >
                 Hemen Başlayın
-              </a>
+              </Link>
             </div>
           </div>
           
