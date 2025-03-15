@@ -1,15 +1,11 @@
 'use client';
-
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import Image from 'next/image';
-import { useAuth, AuthProvider } from '@/context/AuthContext';
 
 export default function DashboardLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const pathname = usePathname();
-
   const menuItems = [
     { href: '/dashboard', label: 'Dashboard', icon: (
       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -28,7 +24,6 @@ export default function DashboardLayout({ children }) {
       </svg>
     )}
   ];
-
   // Çıkış Yap butonu için ayrı bir değişken oluşturalım
   const logoutItem = {
     label: 'Çıkış Yap',
@@ -38,29 +33,6 @@ export default function DashboardLayout({ children }) {
       </svg>
     )
   };
-
-  return (
-    <AuthProvider>
-      <DashboardContent 
-        isSidebarOpen={isSidebarOpen} 
-        setIsSidebarOpen={setIsSidebarOpen} 
-        pathname={pathname} 
-        menuItems={menuItems} 
-        logoutItem={logoutItem}
-        children={children} 
-      />
-    </AuthProvider>
-  );
-}
-
-// Dashboard içeriğini ayrı bir bileşene taşıyalım
-function DashboardContent({ isSidebarOpen, setIsSidebarOpen, pathname, menuItems, logoutItem, children }) {
-  const { user, logout, loading } = useAuth();
-
-  const handleLogout = async () => {
-    await logout();
-  };
-
   return (
     <div className="min-h-screen bg-background flex">
       {/* Sidebar */}
@@ -88,7 +60,6 @@ function DashboardContent({ isSidebarOpen, setIsSidebarOpen, pathname, menuItems
             </svg>
           </button>
         </div>
-
         {/* User Profile Section - Moved to top */}
         <div className="px-4 py-3 border-b border-border">
           <div className="flex items-center gap-3">
@@ -99,12 +70,8 @@ function DashboardContent({ isSidebarOpen, setIsSidebarOpen, pathname, menuItems
             </div>
             {isSidebarOpen && (
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground truncate">
-                  {user ? `${user.firstName} ${user.lastName}` : 'Kullanıcı'}
-                </p>
-                <p className="text-xs text-muted-foreground truncate">
-                  {user ? user.email : 'kullanici@example.com'}
-                </p>
+                <p className="text-sm font-medium text-foreground truncate">Admin Kullanıcı</p>
+                <p className="text-xs text-muted-foreground truncate">admin@example.com</p>
               </div>
             )}
           </div>
@@ -130,8 +97,6 @@ function DashboardContent({ isSidebarOpen, setIsSidebarOpen, pathname, menuItems
           
           {/* Çıkış Yap butonu - Menü öğelerinin altına taşındı */}
           <button 
-            onClick={handleLogout}
-            disabled={loading}
             className="flex items-center px-3 py-3 text-sm text-red-500 hover:bg-red-500/10 rounded-lg transition-colors w-full mt-2"
           >
             {logoutItem.icon}
@@ -139,7 +104,6 @@ function DashboardContent({ isSidebarOpen, setIsSidebarOpen, pathname, menuItems
           </button>
         </nav>
       </aside>
-
       {/* Main Content */}
       <main className={`flex-1 overflow-auto transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-16'}`}>
         <div className="container mx-auto px-10 py-8">
