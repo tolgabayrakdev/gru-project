@@ -1,6 +1,34 @@
-import Link from "next/link";
+'use client';
 
-export default function Home() {
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { useAuth } from '@/context/AuthContext';
+import { isAuthenticated } from '@/lib/authUtils';
+
+export default function HomePage() {
+  const router = useRouter();
+  const { loading: authLoading } = useAuth();
+
+  useEffect(() => {
+    // Check authentication after auth context has loaded
+    if (!authLoading) {
+      // If user is authenticated, redirect to dashboard
+      if (isAuthenticated()) {
+        router.push('/dashboard');
+      }
+    }
+  }, [router, authLoading]);
+
+  // Show loading spinner while auth context is loading
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-blue-50 dark:from-gray-900 dark:to-blue-950">
       <div className="container mx-auto px-4 py-16">
@@ -13,13 +41,13 @@ export default function Home() {
           </p>
           <div className="mt-8 flex gap-4">
             <Link 
-              href="/sign-in" 
+              href="/login" 
               className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-lg transition-colors"
             >
               Giriş Yap
             </Link>
             <Link 
-              href="/sign-up" 
+              href="/register" 
               className="bg-white hover:bg-gray-100 text-primary border border-primary font-bold py-3 px-6 rounded-lg transition-colors dark:bg-gray-800 dark:hover:bg-gray-700 dark:border-blue-500"
             >
               Kayıt Ol
@@ -72,7 +100,7 @@ export default function Home() {
             
             <div className="mt-10">
               <Link 
-                href="/sign-up" 
+                href="/register" 
                 className="inline-block bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-3 px-6 rounded-lg transition-colors"
               >
                 Hemen Başlayın
@@ -143,7 +171,7 @@ export default function Home() {
         </section>
         
         <footer className="text-center text-gray-600 dark:text-gray-400 border-t border-blue-100 dark:border-blue-900 pt-8">
-          <p>© 2023 Geri Bildirim Uygulaması. Tüm hakları saklıdır.</p>
+          <p>© {new Date().getFullYear()} Geri Bildirim Uygulaması. Tüm hakları saklıdır.</p>
         </footer>
       </div>
     </div>
