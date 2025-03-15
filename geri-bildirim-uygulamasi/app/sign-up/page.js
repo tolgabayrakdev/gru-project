@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { useAuth, AuthProvider } from "@/context/AuthContext";
 import {
   Card,
   CardContent,
@@ -13,6 +14,14 @@ import {
 } from "@/components/ui/card";
 
 export default function SignUp() {
+  return (
+    <AuthProvider>
+      <SignUpForm />
+    </AuthProvider>
+  );
+}
+
+function SignUpForm() {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -22,7 +31,7 @@ export default function SignUp() {
     terms: false,
   });
   const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { register, loading, error: authError } = useAuth();
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -79,19 +88,23 @@ export default function SignUp() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (validateForm()) {
-      setIsSubmitting(true);
-      // Burada kayıt işlemi yapılacak (API çağrısı vb.)
-      console.log("Form gönderiliyor:", formData);
-      
-      // Simüle edilmiş API çağrısı
-      setTimeout(() => {
-        setIsSubmitting(false);
-        // Başarılı kayıt sonrası yönlendirme yapılabilir
-      }, 1500);
+      try {
+        // Kayıt için gerekli verileri hazırla
+        const userData = {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          password: formData.password,
+        };
+        
+        await register(userData);
+      } catch (error) {
+        console.error("Register error:", error);
+      }
     }
   };
 
@@ -112,6 +125,11 @@ export default function SignUp() {
           </CardHeader>
           <CardContent>
             <form className="space-y-4" onSubmit={handleSubmit}>
+              {authError && (
+                <div className="bg-red-50 p-3 rounded-md text-red-600 text-sm">
+                  {authError}
+                </div>
+              )}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label htmlFor="first-name" className="text-sm font-medium text-gray-700">
@@ -242,9 +260,9 @@ export default function SignUp() {
               <Button 
                 type="submit" 
                 className="w-full mt-4"
-                disabled={isSubmitting}
+                disabled={loading}
               >
-                {isSubmitting ? "Kayıt yapılıyor..." : "Kayıt Ol"}
+                {loading ? "Kayıt yapılıyor..." : "Kayıt Ol"}
               </Button>
             </form>
           </CardContent>

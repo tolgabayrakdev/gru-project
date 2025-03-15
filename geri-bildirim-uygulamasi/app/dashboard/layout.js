@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
+import { useAuth, AuthProvider } from '@/context/AuthContext';
 
 export default function DashboardLayout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -36,6 +37,28 @@ export default function DashboardLayout({ children }) {
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
       </svg>
     )
+  };
+
+  return (
+    <AuthProvider>
+      <DashboardContent 
+        isSidebarOpen={isSidebarOpen} 
+        setIsSidebarOpen={setIsSidebarOpen} 
+        pathname={pathname} 
+        menuItems={menuItems} 
+        logoutItem={logoutItem}
+        children={children} 
+      />
+    </AuthProvider>
+  );
+}
+
+// Dashboard içeriğini ayrı bir bileşene taşıyalım
+function DashboardContent({ isSidebarOpen, setIsSidebarOpen, pathname, menuItems, logoutItem, children }) {
+  const { user, logout, loading } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
   };
 
   return (
@@ -76,8 +99,12 @@ export default function DashboardLayout({ children }) {
             </div>
             {isSidebarOpen && (
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-foreground truncate">Admin Kullanıcı</p>
-                <p className="text-xs text-muted-foreground truncate">admin@example.com</p>
+                <p className="text-sm font-medium text-foreground truncate">
+                  {user ? `${user.firstName} ${user.lastName}` : 'Kullanıcı'}
+                </p>
+                <p className="text-xs text-muted-foreground truncate">
+                  {user ? user.email : 'kullanici@example.com'}
+                </p>
               </div>
             )}
           </div>
@@ -103,6 +130,8 @@ export default function DashboardLayout({ children }) {
           
           {/* Çıkış Yap butonu - Menü öğelerinin altına taşındı */}
           <button 
+            onClick={handleLogout}
+            disabled={loading}
             className="flex items-center px-3 py-3 text-sm text-red-500 hover:bg-red-500/10 rounded-lg transition-colors w-full mt-2"
           >
             {logoutItem.icon}

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
+import { useAuth, AuthProvider } from "@/context/AuthContext";
 import {
   Card,
   CardContent,
@@ -13,12 +14,20 @@ import {
 } from "@/components/ui/card";
 
 export default function SignIn() {
+  return (
+    <AuthProvider>
+      <SignInForm />
+    </AuthProvider>
+  );
+}
+
+function SignInForm() {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
   const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { login, loading, error: authError } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -50,19 +59,15 @@ export default function SignIn() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (validateForm()) {
-      setIsSubmitting(true);
-      // Burada giriş işlemi yapılacak (API çağrısı vb.)
-      console.log("Form gönderiliyor:", formData);
-      
-      // Simüle edilmiş API çağrısı
-      setTimeout(() => {
-        setIsSubmitting(false);
-        // Başarılı giriş sonrası yönlendirme yapılabilir
-      }, 1500);
+      try {
+        await login(formData.email, formData.password);
+      } catch (error) {
+        console.error("Login error:", error);
+      }
     }
   };
 
@@ -83,6 +88,11 @@ export default function SignIn() {
           </CardHeader>
           <CardContent>
             <form className="space-y-4" onSubmit={handleSubmit}>
+              {authError && (
+                <div className="bg-red-50 p-3 rounded-md text-red-600 text-sm">
+                  {authError}
+                </div>
+              )}
               <div className="space-y-2">
                 <label htmlFor="email-address" className="text-sm font-medium text-gray-700">
                   E-posta adresi
@@ -145,9 +155,9 @@ export default function SignIn() {
               <Button 
                 type="submit" 
                 className="w-full mt-4" 
-                disabled={isSubmitting}
+                disabled={loading}
               >
-                {isSubmitting ? "Giriş yapılıyor..." : "Giriş Yap"}
+                {loading ? "Giriş yapılıyor..." : "Giriş Yap"}
               </Button>
             </form>
           </CardContent>
