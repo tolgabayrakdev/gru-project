@@ -54,19 +54,19 @@ export class AuthService {
             throw new HttpException(401, "Parola hatalı.");
         }
 
-        const accessToken = this.helper.generateAccessToken({ username: user.username, email: user.email });
-        const refreshToken = this.helper.generateRefreshToken({ username: user.username, email: user.email });
+        const accessToken = this.helper.generateAccessToken({id: user.id, username: user.username, email: user.email });
+        const refreshToken = this.helper.generateRefreshToken({id: user.id, username: user.username, email: user.email });
 
         return { user: { id: user.id, username: user.username, email: user.email }, accessToken, refreshToken };
     }
 
     async verifyUser(token: string) {
         try {
-            const payload: any = this.helper.decodeToken(token);
+            const payload: any = this.helper.decodeToken(token);            
             const user = await pool.query("SELECT * FROM users WHERE id = $1", [payload.id]);
             if (!user) {
                 throw new HttpException(404, "Kullanıcı bulunamadı.");
-            }
+            }            
             return {
                 username: user.rows[0].username,
                 email: user.rows[0].email,

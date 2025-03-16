@@ -3,7 +3,7 @@ import { AuthService } from "../service/auth-service";
 import HttpException from "../exception/http-exception";
 
 
-class AuthController {
+export class AuthController {
     private authService: AuthService;
 
     constructor() {
@@ -11,7 +11,7 @@ class AuthController {
     }
 
 
-    async login(req: Request, res: Response) {
+    login = async (req: Request, res: Response) => {
         try {
             const { email, password } = req.body;
             const user = await this.authService.login(email, password);
@@ -27,12 +27,12 @@ class AuthController {
         }
     }
 
-    async register(req: Request, res: Response) {
+    register = async (req: Request, res: Response) => {
         try {
             const { username, email, password } = req.body;
             const user = await this.authService.register(username, email, password);
             res.status(201).json(user);
-        } catch (error) {
+        } catch (error) {            
             if (error instanceof HttpException) {
                 res.status(error.status).json({ error: error.message });
             } else {
@@ -41,10 +41,10 @@ class AuthController {
         }
     }
 
-    async verifyUser(req: Request, res: Response) {
+    verifyUser = async (req: Request, res: Response) => {
         try {
-            const { token } = req.body;
-            const user = await this.authService.verifyUser(token);
+            const token: any = req.cookies.accessToken;            
+            const user = await this.authService.verifyUser(token);            
             res.status(200).json(user);
         } catch (error) {
             if (error instanceof HttpException) {
@@ -55,7 +55,7 @@ class AuthController {
         }
     }
 
-    async logout(_req: Request, res: Response) {
+    logout = async (_req: Request, res: Response) => {
         try {
             res.clearCookie('accessToken');
             res.clearCookie('refreshToken');
@@ -69,5 +69,3 @@ class AuthController {
         }
     }
 }
-
-export default AuthController;
