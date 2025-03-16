@@ -8,6 +8,7 @@ import {
   QrCode, 
   MessageSquare, 
   Users,
+  Settings,
   LogOut,
   ChevronLeft,
   ChevronRight
@@ -52,7 +53,7 @@ export function Sidebar() {
           </li>
           <li>
             <Link 
-              href="/dashboard/feedback" 
+              href="/dashboard/feedbacks" 
               className={`flex items-center ${collapsed ? "justify-center" : "space-x-2"} p-2 rounded-md hover:bg-muted transition-colors`}
             >
               <MessageSquare className="h-5 w-5 text-muted-foreground" />
@@ -75,6 +76,15 @@ export function Sidebar() {
             >
               <Users className="h-5 w-5 text-muted-foreground" />
               {!collapsed && <span>Kullanıcılar</span>}
+            </Link>
+          </li>
+          <li>
+            <Link 
+              href="/dashboard/settings" 
+              className={`flex items-center ${collapsed ? "justify-center" : "space-x-2"} p-2 rounded-md hover:bg-muted transition-colors`}
+            >
+              <Settings className="h-5 w-5 text-muted-foreground" />
+              {!collapsed && <span>Ayarlar</span>}
             </Link>
           </li>
         </ul>
