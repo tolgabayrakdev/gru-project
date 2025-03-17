@@ -1,131 +1,197 @@
 "use client";
 import { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
 
+// Types
 interface Movie {
+  id: number;
   title: string;
-  year: string;
-  description: string;
-  imdbRating: string;
-  imageUrl: string;
+  release_date: string;
+  overview: string;
+  vote_average: number;
+  poster_path: string;
+  runtime?: number;
+  genres?: {id: number; name: string}[];
 }
 
-export default function Home() {
-  const [selectedType, setSelectedType] = useState('');
-  const [showRecommendation, setShowRecommendation] = useState(false);
+interface Question {
+  id: string;
+  text: string;
+  options: {
+    value: string;
+    label: string;
+  }[];
+}
 
-  const movieDatabase: Record<string, Movie[]> = {
-    'Aksiyon': [
-      {
-        title: 'John Wick',
-        year: '2014',
-        description: 'Emekli bir suikastçı, köpeğinin öldürülmesinden sonra intikam için geri döner.',
-        imdbRating: '7.4',
-        imageUrl: 'https://m.media-amazon.com/images/M/MV5BMTU2NjA1ODgzMF5BMl5BanBnXkFtZTgwMTM2MTI4MjE@._V1_.jpg'
-      },
-      {
-        title: 'Mad Max: Fury Road',
-        year: '2015',
-        description: 'Post-apokaliptik bir dünyada, Max ve Furiosa hayatta kalmak için mücadele eder.',
-        imdbRating: '8.1',
-        imageUrl: 'https://m.media-amazon.com/images/M/MV5BN2EwM2I5OWMtMGQyMi00Zjg1LWJkNTctZTdjYTA4OGUwZjMyXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_.jpg'
-      }
-    ],
-    'Komedi': [
-      {
-        title: 'Superbad',
-        year: '2007',
-        description: 'İki liseli arkadaş, mezuniyet partisine gitmeden önce eğlenceli bir maceraya atılır.',
-        imdbRating: '7.6',
-        imageUrl: 'https://m.media-amazon.com/images/M/MV5BMTc0NjIyMjA2OF5BMl5BanBnXkFtZTcwMzIxNDE1MQ@@._V1_.jpg'
-      },
-      {
-        title: 'Hangover',
-        year: '2009',
-        description: 'Las Vegas\'ta bekarlığa veda partisinden sonra arkadaşlarını arayan üç adamın hikayesi.',
-        imdbRating: '7.7',
-        imageUrl: 'https://m.media-amazon.com/images/M/MV5BNGQwZjg5YmYtY2VkNC00NzliLTljYTctNzI5NmU3MjE2ODQzXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_.jpg'
-      }
-    ]
-  };
+// TMDB API configuration
+const TMDB_API_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
+const TMDB_BASE_URL = "https://api.themoviedb.org/3";
+const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
 
-  const handleTypeSelect = (type: string) => {
-    setSelectedType(type);
-    setShowRecommendation(true);
-  };
-
-  const resetSelection = () => {
-    setSelectedType('');
-    setShowRecommendation(false);
-  };
-
-  const getRecommendedMovies = () => {
-    return movieDatabase[selectedType] || [];
-  };
-
+export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-600 to-blue-500 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
-        <div className="p-8">
-          <h1 className="text-2xl font-bold text-center text-gray-800 mb-8">
-            Film Öneri Asistanı
-          </h1>
-          
-          {!showRecommendation ? (
-            <div className="space-y-6">
-              <div className="text-center">
-                <p className="text-lg font-medium text-gray-600 mb-6">
-                  Ne tür film izlemek istersiniz?
-                </p>
-                <div className="grid gap-3">
-                  {['Aksiyon', 'Komedi'].map((type) => (
-                    <button
-                      key={type}
-                      onClick={() => handleTypeSelect(type)}
-                      className="w-full py-3 px-4 bg-purple-100 hover:bg-purple-200 text-purple-700 rounded-lg transition-colors duration-200"
-                    >
-                      {type}
-                    </button>
-                  ))}
+    <div className="min-h-screen bg-gradient-to-br from-indigo-600 to-purple-700">
+      {/* Hero Section */}
+      <div className="relative overflow-hidden py-16 sm:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h1 className="text-4xl tracking-tight font-extrabold text-white sm:text-5xl md:text-6xl">
+              <span className="block">Film Öneri</span>
+              <span className="block text-indigo-200">Asistanı</span>
+            </h1>
+            <p className="mt-3 max-w-md mx-auto text-base text-indigo-100 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
+              Ruh halinize ve tercihlerinize göre kişiselleştirilmiş film önerileri alın. Artık "Ne izlesem?" sorusuna son!
+            </p>
+            <div className="mt-10 max-w-sm mx-auto sm:max-w-none sm:flex sm:justify-center">
+              <div className="rounded-md shadow">
+                <Link href="/quiz" className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-700 bg-white hover:bg-indigo-50 md:py-4 md:text-lg md:px-10">
+                  Hemen Başla
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Features Section */}
+      <div className="bg-white py-16 sm:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-base text-indigo-600 font-semibold tracking-wide uppercase">Özellikler</h2>
+            <p className="mt-2 text-3xl font-extrabold text-gray-900 sm:text-4xl">
+              Kişiselleştirilmiş Film Deneyimi
+            </p>
+            <p className="mt-4 max-w-2xl text-xl text-gray-500 mx-auto">
+              Ruh halinize ve tercihlerinize göre özel film önerileri alın, yeni filmler keşfedin.
+            </p>
+          </div>
+
+          <div className="mt-16">
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="pt-6">
+                <div className="flow-root bg-gray-50 rounded-lg px-6 pb-8">
+                  <div className="-mt-6">
+                    <div>
+                      <span className="inline-flex items-center justify-center p-3 bg-indigo-500 rounded-md shadow-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                        </svg>
+                      </span>
+                    </div>
+                    <h3 className="mt-8 text-lg font-medium text-gray-900 tracking-tight">Kişiselleştirilmiş Öneriler</h3>
+                    <p className="mt-5 text-base text-gray-500">Ruh halinize, tercihlerinize ve izleme bağlamınıza göre özel film önerileri alın.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-6">
+                <div className="flow-root bg-gray-50 rounded-lg px-6 pb-8">
+                  <div className="-mt-6">
+                    <div>
+                      <span className="inline-flex items-center justify-center p-3 bg-indigo-500 rounded-md shadow-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                      </span>
+                    </div>
+                    <h3 className="mt-8 text-lg font-medium text-gray-900 tracking-tight">Güncel Film Veritabanı</h3>
+                    <p className="mt-5 text-base text-gray-500">TMDB API ile güncel film verilerine erişim sağlayarak her zaman yeni öneriler sunar.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-6">
+                <div className="flow-root bg-gray-50 rounded-lg px-6 pb-8">
+                  <div className="-mt-6">
+                    <div>
+                      <span className="inline-flex items-center justify-center p-3 bg-indigo-500 rounded-md shadow-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </span>
+                    </div>
+                    <h3 className="mt-8 text-lg font-medium text-gray-900 tracking-tight">Detaylı Film Bilgileri</h3>
+                    <p className="mt-5 text-base text-gray-500">Film posterleri, puanları, süreleri ve konuları hakkında detaylı bilgiler edinin.</p>
+                  </div>
                 </div>
               </div>
             </div>
-          ) : (
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold text-gray-800 text-center">
-                Size Özel Film Önerileri
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {getRecommendedMovies().map((movie) => (
-                  <div key={movie.title} className="bg-purple-50 rounded-lg overflow-hidden shadow-md">
-                    <img 
-                      src={movie.imageUrl} 
-                      alt={movie.title}
-                      className="w-full h-64 object-cover"
-                    />
-                    <div className="p-4">
-                      <h3 className="font-bold text-lg text-gray-800">{movie.title}</h3>
-                      <p className="text-sm text-gray-600">{movie.year}</p>
-                      <p className="text-sm text-gray-600 mt-2">{movie.description}</p>
-                      <div className="mt-3 flex items-center">
-                        <span className="text-yellow-500">★</span>
-                        <span className="ml-1 text-gray-700">{movie.imdbRating}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="text-center mt-6">
-                <button
-                  onClick={resetSelection}
-                  className="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-6 rounded-lg transition-colors duration-200"
-                >
-                  Yeniden Başla
-                </button>
-              </div>
-            </div>
-          )}
+          </div>
         </div>
       </div>
+
+      {/* How it Works Section */}
+      <div className="bg-indigo-50 py-16 sm:py-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-base text-indigo-600 font-semibold tracking-wide uppercase">Nasıl Çalışır?</h2>
+            <p className="mt-2 text-3xl font-extrabold text-gray-900 sm:text-4xl">
+              Dört Basit Adımda Film Önerileri
+            </p>
+          </div>
+
+          <div className="mt-16">
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white mb-4">
+                  <span className="text-lg font-bold">1</span>
+                </div>
+                <h3 className="text-lg font-medium text-gray-900">Ruh Halinizi Seçin</h3>
+                <p className="mt-2 text-base text-gray-500">Şu anki ruh halinizi belirterek size uygun film önerileri alın.</p>
+              </div>
+
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white mb-4">
+                  <span className="text-lg font-bold">2</span>
+                </div>
+                <h3 className="text-lg font-medium text-gray-900">Film Tercihlerinizi Belirtin</h3>
+                <p className="mt-2 text-base text-gray-500">Film türü, uzunluğu ve dönem tercihlerinizi seçin.</p>
+              </div>
+
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white mb-4">
+                  <span className="text-lg font-bold">3</span>
+                </div>
+                <h3 className="text-lg font-medium text-gray-900">İzleme Bağlamınızı Paylaşın</h3>
+                <p className="mt-2 text-base text-gray-500">Filmi kiminle izleyeceğinizi belirterek daha doğru öneriler alın.</p>
+              </div>
+
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <div className="flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white mb-4">
+                  <span className="text-lg font-bold">4</span>
+                </div>
+                <h3 className="text-lg font-medium text-gray-900">Kişiselleştirilmiş Öneriler Alın</h3>
+                <p className="mt-2 text-base text-gray-500">Tüm tercihlerinize göre özelleştirilmiş film önerilerini görüntüleyin.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* CTA Section */}
+      <div className="bg-indigo-700">
+        <div className="max-w-2xl mx-auto text-center py-16 px-4 sm:py-20 sm:px-6 lg:px-8">
+          <h2 className="text-3xl font-extrabold text-white sm:text-4xl">
+            <span className="block">Hemen Film Önerileri Almaya Başlayın</span>
+          </h2>
+          <p className="mt-4 text-lg leading-6 text-indigo-100">
+            Ruh halinize ve tercihlerinize göre özel film önerileri için hemen testi başlatın.
+          </p>
+          <Link href="/quiz" className="mt-8 w-full inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-indigo-50 sm:w-auto">
+            Teste Başla
+          </Link>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-white">
+        <div className="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
+          <p className="text-center text-base text-gray-400">
+            &copy; {new Date().getFullYear()} Tolga BAYRAK. Film verileri TMDB API kullanılarak sağlanmaktadır.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

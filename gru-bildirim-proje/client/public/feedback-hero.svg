@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Elements -->
+  <circle cx="700" cy="100" r="60" fill="#EBF8FF" />
+  <circle cx="100" cy="500" r="80" fill="#E6FFFA" />
+  
+  <!-- Main Device Frame -->
+  <rect x="200" y="100" width="400" height="300" rx="20" fill="#4299E1" />
+  <rect x="220" y="120" width="360" height="260" rx="10" fill="white" />
+  
+  <!-- QR Code -->
+  <rect x="250" y="150" width="100" height="100" rx="5" fill="#2C5282" />
+  <rect x="270" y="170" width="60" height="60" rx="2" fill="white" />
+  <rect x="280" y="180" width="40" height="40" fill="#2C5282" />
+  
+  <!-- Feedback Elements -->
+  <rect x="380" y="150" width="170" height="20" rx="4" fill="#E2E8F0" />
+  <rect x="380" y="180" width="140" height="20" rx="4" fill="#E2E8F0" />
+  <rect x="380" y="210" width="160" height="20" rx="4" fill="#E2E8F0" />
+  
+  <!-- Rating Stars -->
+  <g transform="translate(250, 280)">
+    <path d="M10,0 L13,6 L20,7 L15,12 L16,19 L10,16 L4,19 L5,12 L0,7 L7,6 Z" fill="#4299E1" />
+    <path d="M40,0 L43,6 L50,7 L45,12 L46,19 L40,16 L34,19 L35,12 L30,7 L37,6 Z" fill="#4299E1" />
+    <path d="M70,0 L73,6 L80,7 L75,12 L76,19 L70,16 L64,19 L65,12 L60,7 L67,6 Z" fill="#4299E1" />
+    <path d="M100,0 L103,6 L110,7 L105,12 L106,19 L100,16 L94,19 L95,12 L90,7 L97,6 Z" fill="#4299E1" />
+    <path d="M130,0 L133,6 L140,7 L135,12 L136,19 L130,16 L124,19 L125,12 L120,7 L127,6 Z" fill="#CBD5E0" />
+  </g>
+  
+  <!-- Mobile Device -->
+  <rect x="450" y="250" width="100" height="180" rx="10" fill="#2D3748" />
+  <rect x="460" y="260" width="80" height="140" rx="5" fill="#4299E1" />
+  <circle cx="500" cy="410" r="10" fill="#A0AEC0" />
+  
+  <!-- Decorative Elements -->
+  <circle cx="280" cy="500" r="30" fill="#BEE3F8" />
+  <circle cx="520" cy="80" r="40" fill="#90CDF4" />
+  
+  <!-- Connection Lines -->
+  <path d="M350 200 Q 400 180, 450 320" stroke="#4299E1" stroke-width="2" fill="none" stroke-dasharray="4" />
+  
+  <!-- Floating Feedback Icons -->
+  <g transform="translate(600, 250)">
+    <circle cx="0" cy="0" r="20" fill="#48BB78" />
+    <path d="M-8,-8 L-8,8 L8,-8 L8,8" stroke="white" stroke-width="2" />
+  </g>
+  <g transform="translate(150, 200)">
+    <circle cx="0" cy="0" r="15" fill="#F56565" />
+    <path d="M-6,-6 L6,6 M-6,6 L6,-6" stroke="white" stroke-width="2" />
+  </g>
+</svg> 

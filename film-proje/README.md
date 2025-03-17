@@ -1,19 +1,58 @@
 # Film Öneri Asistanı 
 
-Bu proje, kullanıcıların tercihlerine göre film önerileri sunan bir web uygulamasıdır.
+Bu proje, kullanıcıların ruh haline, tercihlerine ve izleme bağlamına göre film önerileri sunan modern bir web uygulamasıdır. TMDB API kullanarak güncel film verilerine erişir.
 
-## Mevcut Özellikler 
+## Özellikler
 
-- **Kullanıcı Tercihleri**
-  - Film türü seçimi (Aksiyon, Komedi, Drama, Bilim Kurgu)
-  - Ruh hali belirleme
+- **Kişiselleştirilmiş Sorular**
+  - Ruh hali analizi
+  - Film türü tercihi
   - Film uzunluğu tercihi
-  - Imdb
+  - İzleme arkadaşı (yalnız, aile, arkadaşlar, vb.)
+  - Film dönemi tercihi
 
-Örnek 5 soru ile film analizi ve fragmanı olabilir.
+- **Film Önerileri**
+  - Kullanıcı tercihlerine göre özelleştirilmiş film önerileri
+  - Film posterleri ve temel bilgiler
+  - Detaylı film sayfaları
+  - TMDB puanları
 
-- **Film Detayları**
-  - Film posteri
-  - Yapım yılı
-  - IMDB puanı
-  - Kısa film özeti
+## Kurulum
+
+1. Projeyi klonlayın:
+   ```bash
+   git clone <repo-url>
+   cd film-proje
+   ```
+
+2. Bağımlılıkları yükleyin:
+   ```bash
+   npm install
+   ```
+
+3. TMDB API Anahtarı Alın:
+   - [TMDB](https://www.themoviedb.org/) sitesine kaydolun
+   - Hesap ayarlarından API anahtarı alın
+   - Projenin kök dizininde `.env.local` dosyası oluşturun:
+     ```
+     NEXT_PUBLIC_TMDB_API_KEY=sizin_api_anahtarınız
+     ```
+
+4. Uygulamayı çalıştırın:
+   ```bash
+   npm run dev
+   ```
+
+5. Tarayıcınızda [http://localhost:3000](http://localhost:3000) adresine gidin.
+
+## Teknolojiler
+
+- Next.js 15
+- React 19
+- TypeScript
+- Tailwind CSS
+- TMDB API
+
+## Lisans
+
+MIT

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="256" cy="256" r="256" fill="#4299E1" />
+  
+  <!-- Chat Bubble Shape -->
+  <path 
+    d="M 396 176
+       C 396 149.49 374.51 128 348 128
+       H 164
+       C 137.49 128 116 149.49 116 176
+       V 288
+       C 116 314.51 137.49 336 164 336
+       H 268
+       L 332 400
+       V 336
+       H 348
+       C 374.51 336 396 314.51 396 288
+       V 176
+       Z"
+    fill="white"
+  />
+  
+  <!-- QR Code Element -->
+  <rect x="156" y="168" width="80" height="80" rx="8" fill="#2C5282" />
+  <rect x="172" y="184" width="48" height="48" rx="4" fill="white" />
+  <rect x="180" y="192" width="32" height="32" fill="#2C5282" />
+  
+  <!-- Rating Stars -->
+  <g transform="translate(256, 188)">
+    <path d="M20,0 L26,12 L40,14 L30,24 L32,38 L20,32 L8,38 L10,24 L0,14 L14,12 Z" fill="#4299E1" />
+    <path d="M70,0 L76,12 L90,14 L80,24 L82,38 L70,32 L58,38 L60,24 L50,14 L64,12 Z" fill="#4299E1" />
+  </g>
+  
+  <!-- Feedback Lines -->
+  <rect x="256" y="248" width="100" height="12" rx="6" fill="#4299E1" />
+  <rect x="256" y="276" width="80" height="12" rx="6" fill="#4299E1" />
+</svg>
